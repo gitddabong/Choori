@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "164068828655",
+    "project_id": "choori-388bd",
+    "storage_bucket": "choori-388bd.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:164068828655:android:6d001994acc30c96e8c21a",
+        "android_client_info": {
+          "package_name": "com.example.choori"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "164068828655-vh96lf2otifvnur22jhue2lnfm2e88ds.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD1okl4rSDC1eDUbshcCWaqml8CZXnecZQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "164068828655-vh96lf2otifvnur22jhue2lnfm2e88ds.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
