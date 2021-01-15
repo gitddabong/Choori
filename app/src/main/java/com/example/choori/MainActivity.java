@@ -18,12 +18,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         Button firebaseauthbtn = (Button)findViewById(R.id.firebaseauthbtn);
         firebaseauthbtn.setOnClickListener(this);
-
-        //I don't wanna change this code
     }
-
-
-    // test Code
 
     @Override
     public void onClick(View view){
