@@ -16,13 +16,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Button firebaseauthbtn = (Button)findViewById(R.id.firebaseauthbtn);
+        Button firebaseauthbtn = (Button) findViewById(R.id.firebaseauthbtn);
         firebaseauthbtn.setOnClickListener(this);
     }
 
     @Override
-    public void onClick(View view){
-        switch(view.getId()){
+    public void onClick(View view) {
+        switch (view.getId()) {
             case R.id.firebaseauthbtn:
                 Intent i = new Intent(this, AuthActivity.class);
                 startActivity(i);
