@@ -9,7 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Choori">
-        <activity android:name=".authentication.FirebaseUIActivity"></activity>
+        <activity android:name=".authentication.SignedInActivity"></activity>
+        <activity android:name=".authentication.FirebaseUIActivity" />
         <activity android:name=".authentication.AuthActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>

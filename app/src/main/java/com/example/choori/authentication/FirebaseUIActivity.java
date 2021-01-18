@@ -36,13 +36,10 @@ public class FirebaseUIActivity extends AppCompatActivity implements View.OnClic
             IdpResponse response = IdpResponse.fromResultIntent(data);
 
             if (resultCode == RESULT_OK) {
-                /*
                 // Successfully signed in
                 Intent i = new Intent(this, SignedInActivity.class);
                 i.putExtras(data);
                 startActivity(i);
-                 */
-                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
             }
             else {
                 // Sign in failed. If response is null the user canceled the
