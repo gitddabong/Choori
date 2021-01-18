@@ -147,4 +147,6 @@ public class SignedInActivity extends AppCompatActivity implements View.OnClickL
             ((TextView) findViewById(R.id.idp_token)).setText(token);
         }
     }
+
+    // 2021.01.18 git push test
 }
