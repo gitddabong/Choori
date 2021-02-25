@@ -6,4 +6,67 @@
     android:layout_height="match_parent"
     tools:context=".MainMenu">
 
+    <Button
+        android:id="@+id/mute"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="음소거"
+        tools:ignore="MissingConstraints" />
+
+    <Button
+        android:id="@+id/earn_coin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="코인 얻기"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="81dp"
+        tools:layout_editor_absoluteY="197dp" />
+
+    <Button
+        android:id="@+id/pay_coin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="36dp"
+        android:text="산소 캡슐 구입"
+        app:layout_constraintLeft_toRightOf="@+id/earn_coin"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteY="197dp" />
+
+    <Button
+        android:id="@+id/questioning"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="문제 출제"
+        app:layout_constraintLeft_toLeftOf="@+id/earn_coin"
+        tools:layout_editor_absoluteY="300dp"
+        tools:ignore="MissingConstraints" />
+
+    <Button
+        android:id="@+id/qna"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="문의"
+        app:layout_constraintRight_toRightOf="@+id/pay_coin"
+        tools:layout_editor_absoluteY="300dp"
+        tools:ignore="MissingConstraints" />
+
+    <Button
+        android:id="@+id/challenge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="추리생존게임 도전"
+        app:layout_constraintLeft_toLeftOf="@+id/questioning"
+        tools:layout_editor_absoluteY="400dp"
+        tools:ignore="MissingConstraints" />
+
+    <Button
+        android:id="@+id/ranking"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="랭킹"
+        app:layout_constraintRight_toRightOf="@+id/qna"
+        app:layout_editor_absoluteY="400dp"
+        tools:ignore="MissingConstraints" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
