@@ -37,7 +37,7 @@ public class FirebaseUIActivity extends AppCompatActivity implements View.OnClic
 
             if (resultCode == RESULT_OK) {
                 // Successfully signed in
-                Intent i = new Intent(this, SignedInActivity.class);
+                Intent i = new Intent(this, scenario.class);
                 i.putExtras(data);
                 startActivity(i);
             }
