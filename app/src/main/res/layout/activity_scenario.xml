@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".authentication.scenario">
+
+    <TextView
+        android:id="@+id/scenario_text1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="시나리오"
+        android:textSize="30dp"
+        android:textColor="@color/purple_700"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/scenario_text2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="1. VR 개발하는 대기업에서 보상금 100억을 걸고 테스트 선발자를 모집하였다.\n\n
+2. 나는 선발되어 참가를 하게 되었는데, VR 게임이 시작되자 주변은 심해로 변했고 이건 테스트가 아니라 실제 생존게임이였다는 것을 알게 되었다.\n\n
+3. 처음 산소 캡슐(lifepoint)은 10개가 주어지고, 각 문제마다 타이머가 걸려있다.\n\n
+4. 문제를 해결하면 코인을 받게 된다. 이 코인으로 나중에 산소 캡슐을 구입할 수 있다.\n\n
+5. 문제를 해결하지 못하거나 타이머가 지났을 때 소형 잠수함의 산소 캡슐이 1개 차감된다.\n\n
+6. 모든 문제를 풀어야 심해에서 탈출할 수 있다.\n"
+        android:textSize="20dp"
+        android:textColor="@android:color/background_dark"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/scenario_text1" />
+
+    <Button
+        android:id="@+id/skip_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="skip"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        tools:ignore="MissingConstraints" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
