@@ -74,7 +74,7 @@ public class FirebaseUIActivity extends AppCompatActivity implements View.OnClic
                     }
                 });
 
-                if (user.getUid() != userID) {
+                if (user.getUid().equals(userID)) {
                     if (user != null) {
                         Map<String, Object> userMap = new HashMap<>();
                         userMap.put("lifepoint", lifepoint);
