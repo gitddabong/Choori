@@ -58,7 +58,7 @@ public class FirebaseUIActivity extends AppCompatActivity implements View.OnClic
 
             if (resultCode == RESULT_OK) {
                 // Successfully signed in
-                // ↓ Authentication 계정 정보 조회 및 users 테이블 입력
+                // ↓ Authentication 계정 정보 조회 및 users 테이블 입력 2021.03.02
                 FirebaseUser user = mAuth.getCurrentUser();
 
                 // users 테이블에 Authentication UID 정보가 있는지 확인하는 과정
@@ -85,7 +85,7 @@ public class FirebaseUIActivity extends AppCompatActivity implements View.OnClic
                     }
                 }
                 // users 테이블에 Authentication UID 정보가 있는지 확인하는 과정
-                // ↑ Authentication 계정 정보 조회 및 users 테이블 입력
+                // ↑ Authentication 계정 정보 조회 및 users 테이블 입력 2021.03.02
 
                 Intent i = new Intent(this, scenario.class);
                 i.putExtras(data);
