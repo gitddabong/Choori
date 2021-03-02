@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.example.choori.MainActivity;
+import com.example.choori.MainMenu;
 import com.example.choori.R;
 
 public class scenario extends AppCompatActivity implements View.OnClickListener {
@@ -26,7 +27,7 @@ public class scenario extends AppCompatActivity implements View.OnClickListener 
             @Override
             public void run() {
                 //Toast.makeText(MainActivity.this,"check ok :)", Toast.LENGTH_SHORT).show(); // 5초 확인 용 메시지
-                Intent i = new Intent(scenario.this, AuthActivity.class); // 메인 메뉴 모여 있는 액티비티가 없어서 우선 AuthActivity.class로 임시로 이동 (2021.02.26)
+                Intent i = new Intent(scenario.this, MainMenu.class); // 메인 메뉴 모여 있는 액티비티가 없어서 우선 AuthActivity.class로 임시로 이동 (2021.02.26)
                 startActivity(i);
             }
         }, 10000);// 10초 정도 딜레이를 준 후 시작
@@ -43,7 +44,7 @@ public class scenario extends AppCompatActivity implements View.OnClickListener 
     public void onClick(View view){
         switch(view.getId()){
             case R.id.skip_button:
-                Intent i = new Intent(scenario.this, AuthActivity.class); // 메인 메뉴 모여 있는 액티비티가 없어서 우선 AuthActivity.class로 임시로 이동 (2021.02.26)
+                Intent i = new Intent(scenario.this, MainMenu.class); // 메인 메뉴 모여 있는 액티비티가 없어서 우선 AuthActivity.class로 임시로 이동 (2021.02.26)
                 startActivity(i);
                 break;
             default:

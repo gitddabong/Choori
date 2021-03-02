@@ -1,24 +1,45 @@
 package com.example.choori.authentication;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.Toast;
 
 import com.example.choori.R;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.SetOptions;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class FirebaseUIActivity extends AppCompatActivity implements View.OnClickListener {
     private static final int RC_SIGN_IN                = 1000;
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private FirebaseFirestore Firestore = FirebaseFirestore.getInstance();
+
+    int lifepoint = 10; // Default: 산소 캡슐 10개
+    int coin_point = 0; // Default: 코인 0개
+    String userID = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +58,35 @@ public class FirebaseUIActivity extends AppCompatActivity implements View.OnClic
 
             if (resultCode == RESULT_OK) {
                 // Successfully signed in
+                // ↓ Authentication 계정 정보 조회 및 users 테이블 입력
+                FirebaseUser user = mAuth.getCurrentUser();
+
+                // users 테이블에 Authentication UID 정보가 있는지 확인하는 과정
+                Firestore.collection("users").addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                        if (value != null) {
+                            for (DocumentSnapshot snap : value.getDocuments()) {
+                                Map<String, Object> shot = snap.getData();
+                                userID = snap.getId();
+                            }
+                        }
+                    }
+                });
+
+                if (user.getUid() != userID) {
+                    if (user != null) {
+                        Map<String, Object> userMap = new HashMap<>();
+                        userMap.put("lifepoint", lifepoint);
+                        userMap.put("coin", coin_point);
+                        Firestore.collection("users").document(user.getUid()).set(userMap, SetOptions.merge());
+                    } else {
+                        Toast.makeText(FirebaseUIActivity.this, "error", Toast.LENGTH_SHORT).show();
+                    }
+                }
+                // users 테이블에 Authentication UID 정보가 있는지 확인하는 과정
+                // ↑ Authentication 계정 정보 조회 및 users 테이블 입력
+
                 Intent i = new Intent(this, scenario.class);
                 i.putExtras(data);
                 startActivity(i);
