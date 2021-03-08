@@ -2,9 +2,9 @@ package com.example.choori.authentication;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -45,8 +45,10 @@ public class FirebaseUIActivity extends AppCompatActivity implements View.OnClic
     int lifepoint = 10; // Default: 산소 캡슐 10개
     int coin_point = 0; // Default: 코인 0개
     String userID = "";
-    //String nickname = "";
-    //String DB_nickname = "";
+    String databaseID = "";
+    //String testID = ""; // 임시 테스트 snap.getId 확인 용도
+    String nickname = "";
+    String DB_nickname = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +57,34 @@ public class FirebaseUIActivity extends AppCompatActivity implements View.OnClic
 
         Button firebaseuiauthbtn = (Button)findViewById(R.id.firebaseuiauthbtn);
         firebaseuiauthbtn.setOnClickListener(this);
+
+        // ↓ Authentication 계정 정보 조회 및 users 테이블 입력 (수정: 2021.03.08)
+
+        FirebaseUser user = mAuth.getCurrentUser();
+
+        databaseID = user.getUid();
+
+        // users 테이블에 Authentication UID 정보가 있는지 확인하는 과정
+        Firestore.collection("users").addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                if (value != null) {
+                    for (DocumentSnapshot snap : value.getDocuments()) {
+                        Map<String, Object> shot = snap.getData();
+                        if (databaseID.equals(snap.getId())) {
+                            userID = snap.getId();
+                            DB_nickname = String.valueOf(snap.get("nickname"));
+                            //testID = snap.getId();
+                            break;
+                        } else {
+                            userID = "none";
+                            //testID = snap.getId();
+                        }
+                    }
+                }
+            }
+        });
+        // ↑ Authentication 계정 정보 조회 및 users 테이블 입력 (수정: 2021.03.08)
     }
 
     @Override
@@ -65,75 +95,67 @@ public class FirebaseUIActivity extends AppCompatActivity implements View.OnClic
 
             if (resultCode == RESULT_OK) {
                 // Successfully signed in
-                // ↓ Authentication 계정 정보 조회 및 users 테이블 입력 2021.03.02
-                FirebaseUser user = mAuth.getCurrentUser();
 
-                // users 테이블에 Authentication UID 정보가 있는지 확인하는 과정
-                Firestore.collection("users").addSnapshotListener(new EventListener<QuerySnapshot>() {
-                    @Override
-                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-                        if (value != null) {
-                            for (DocumentSnapshot snap : value.getDocuments()) {
-                                Map<String, Object> shot = snap.getData();
-                                if (user.getUid().equals(snap.getId())) {
-                                    userID = snap.getId();
-                                } else {
-                                    userID = "none";
-                                }
-                                //DB_nickname = String.valueOf(snap.get("nickname"));
-                            }
-                        }
+                // ↓ Authentication 계정 정보 조회 및 users 테이블 입력 2021.03.02
+
+                /*
+                // [테스트 코드] ↓ user.getUid와 userID 값 확인
+
+                AlertDialog.Builder dlg = new AlertDialog.Builder(FirebaseUIActivity.this);
+                dlg.setTitle("현재 로그인 정보: "+databaseID);
+                dlg.setMessage("DB 로그인 정보: "+userID); // 해당 라인 오류인지 출력이 안됨 그래서 밑에 별도 다이얼로그 추가
+                dlg.setPositiveButton("check",new DialogInterface.OnClickListener(){
+                    public void onClick(DialogInterface dialog, int which) {
+                        Toast.makeText(FirebaseUIActivity.this,"check ok :)", Toast.LENGTH_SHORT).show();
                     }
                 });
+                dlg.show();
 
-                if (user.getUid().equals(userID)) {
-                    Toast.makeText(FirebaseUIActivity.this, "hello " + userID, Toast.LENGTH_SHORT).show();
-                } else {
-                    if (user != null) {
+                AlertDialog.Builder dlg2 = new AlertDialog.Builder(FirebaseUIActivity.this);
+                dlg2.setTitle("DB 로그인 정보: "+userID);
+                dlg2.setMessage("snap 정보: "+testID);
+                dlg2.setPositiveButton("check",new DialogInterface.OnClickListener(){
+                    public void onClick(DialogInterface dialog, int which) {
+                        Toast.makeText(FirebaseUIActivity.this,"check ok :)", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                dlg2.show();
+
+                // [테스트 코드] ↑ user.getUid와 userID 값 확인
+                 */
+                // users 테이블에 Authentication UID 정보가 있는지 확인하는 과정
+                // ↑ Authentication 계정 정보 조회 및 users 테이블 입력 2021.03.02
+
+                if (DB_nickname == "") {
+                    final EditText nickname_text = new EditText(FirebaseUIActivity.this);
+
+                    AlertDialog.Builder nickname_dlg = new AlertDialog.Builder(FirebaseUIActivity.this);
+                    nickname_dlg.setTitle("닉네임 설정 // 최대 10자");
+                    nickname_dlg.setView(nickname_text);
+                    nickname = nickname_text.getText().toString();
+                    nickname_dlg.setPositiveButton("입력", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Toast.makeText(FirebaseUIActivity.this, "닉네임: " + nickname + "입력 되었습니다.", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                    nickname_dlg.show();
+                }
+
+                if (databaseID.equals(userID)) {
+                    Toast.makeText(FirebaseUIActivity.this, "hello " + DB_nickname, Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    if (databaseID != null) {
                         Map<String, Object> userMap = new HashMap<>();
                         userMap.put("lifepoint", lifepoint);
                         userMap.put("coin", coin_point);
-                        Firestore.collection("users").document(user.getUid()).set(userMap, SetOptions.merge());
+                        userMap.put("nickname", nickname);
+                        Firestore.collection("users").document(databaseID).set(userMap, SetOptions.merge());
                     } else {
                         Toast.makeText(FirebaseUIActivity.this, "error", Toast.LENGTH_SHORT).show();
                     }
                 }
-                // users 테이블에 Authentication UID 정보가 있는지 확인하는 과정
-                // ↑ Authentication 계정 정보 조회 및 users 테이블 입력 2021.03.02
-
-                /*
-
-                if (DB_nickname != null) {
-
-                }
-
-                AlertDialog.Builder alert = new AlertDialog.Builder(this);
-                alert.setTitle("닉네임 설정");
-                alert.setMessage("글자 수 제한은 최대 10자입니다.");
-                final EditText name = new EditText(this);
-                InputFilter[] FilterArray = new InputFilter[1];
-                FilterArray[0] = new InputFilter.LengthFilter(10); //글자 수 제한
-                name.setFilters(FilterArray);
-                alert.setView(name);
-                alert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) { //확인 버튼
-                        String username = name.getText().toString();
-                        nickname.setText(username);
-                        SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
-                        SharedPreferences.Editor editor = pref.edit();
-                        editor.putString("nickname", username);
-                        editor.commit();
-                        Toast.makeText(FirebaseUIActivity.this, "닉네임이 설정되었습니다.", Toast.LENGTH_LONG).show();
-                    }
-                });
-                alert.setNegativeButton("취소",new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) { //취소 버튼
-                        Toast.makeText(FirebaseUIActivity.this, "취소 하셨어요!", Toast.LENGTH_LONG).show();
-                    }
-                });
-                alert.show();
-
-                 */
 
                 Intent i = new Intent(this, scenario.class);
                 i.putExtras(data);
