@@ -14,13 +14,13 @@ import java.util.List;
 public class QuizAdapter extends RecyclerView.Adapter<com.example.choori.QuizAdapter.ViewHolder> {
 
     //파이어스토어 리스트 지정
-    private List<Quiz> quiz_data2;
+    private List<Quiz> quiz_data;
     //파이어스토어 리스트 지정
 
     ArrayList<Quiz> items = new ArrayList<Quiz>();
 
     public QuizAdapter(List<Quiz> quiz_data) {
-        this.quiz_data2 = quiz_data;
+        this.quiz_data = quiz_data;
     }
 
     //커스텀 리스너 정의
@@ -49,7 +49,7 @@ public class QuizAdapter extends RecyclerView.Adapter<com.example.choori.QuizAda
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Quiz item = quiz_data2.get(position);
+        Quiz item = quiz_data.get(position);
         holder.textView.setText(item.getTitle());
         holder.textView2.setText(Integer.toString(item.getCoin()));
         holder.author.setText(item.getAuthor());
@@ -58,7 +58,7 @@ public class QuizAdapter extends RecyclerView.Adapter<com.example.choori.QuizAda
 
     @Override
     public int getItemCount() {
-        return quiz_data2.size();
+        return quiz_data.size();
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder{
