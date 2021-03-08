@@ -2,14 +2,12 @@ package com.example.choori.authentication;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
-import android.widget.LinearLayout;
 
 import com.example.choori.Quiz;
 import com.example.choori.QuizAdapter;
@@ -38,10 +36,25 @@ public class quiz_select extends AppCompatActivity implements View.OnClickListen
 
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        GridLayoutManager layoutManager = new GridLayoutManager(getApplicationContext(), 3);
+        //각 행의 열의 개수를 다르게 조정하는 것도 가능
+        /*
+        layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+            @Override
+            public int getSpanSize(int position) {
+                int gridPosition = position % 2;
+                switch (gridPosition){
+                    case 0:
+                    case 1:
+                    case 2:
+                }
+                return 0;
+            }
+        });
+        */
         recyclerView.setLayoutManager(layoutManager);
 
-        //==================문제 리스트 조회 TEST
+        //==================문제 리스트 조회
         quiz_data = new ArrayList<>();
         Firestore.collection("board_write_test").orderBy("timestamp", Query.Direction.DESCENDING).addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
@@ -59,18 +72,16 @@ public class quiz_select extends AppCompatActivity implements View.OnClickListen
                     }
                     adapter = new QuizAdapter(quiz_data);
 
-                    //아직 퀴즈 문제풀이 뷰를 만들지 않았으므로 보
-                    /*
+
                     //클릭 이벤트
                     adapter.setOnItemClickListener(new QuizAdapter.OnItemClickListener() {
                         @Override
                         public void onItemClick(View v, int position) {     //position은 리사이클러뷰 내부의 게시글의 위치. 0부터 시작.
-                            Intent intent = new Intent(getApplicationContext(), board_view.class);
+                            Intent intent = new Intent(getApplicationContext(), quiz_taking_Activity.class);
                             intent.putExtra("documentID", quiz_data.get(position).getDocumentID());
                             startActivity(intent);
                         }
                     });
-                    */
                     recyclerView.setAdapter(adapter);
                 }
             }

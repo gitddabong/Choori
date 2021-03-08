@@ -9,19 +9,20 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Choori">
-        <activity android:name=".authentication.quiz_select"></activity>
-        <activity android:name=".authentication.scenario" />
-        <activity android:name=".MainMenu" />
-        <activity android:name=".authentication.SignedInActivity" />
-        <activity android:name=".authentication.FirebaseUIActivity" />
-        <activity android:name=".authentication.AuthActivity" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".authentication.quiz_taking_Activity"></activity>
+        <activity android:name=".authentication.quiz_select">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".authentication.scenario" />
+        <activity android:name=".MainMenu" />
+        <activity android:name=".authentication.SignedInActivity" />
+        <activity android:name=".authentication.FirebaseUIActivity" />
+        <activity android:name=".authentication.AuthActivity" />
+        <activity android:name=".MainActivity"></activity>
     </application>
 
 </manifest>
