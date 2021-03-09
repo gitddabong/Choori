@@ -17,6 +17,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.choori.MainMenu;
 import com.example.choori.R;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
@@ -46,9 +47,8 @@ public class FirebaseUIActivity extends AppCompatActivity implements View.OnClic
     int coin_point = 0; // Default: 코인 0개
     String userID = "";
     String databaseID = "";
-    //String testID = ""; // 임시 테스트 snap.getId 확인 용도
-    String nickname = "";
     String DB_nickname = "";
+    //String testID = ""; // 임시 테스트 snap.getId 확인 용도
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -126,22 +126,6 @@ public class FirebaseUIActivity extends AppCompatActivity implements View.OnClic
                 // users 테이블에 Authentication UID 정보가 있는지 확인하는 과정
                 // ↑ Authentication 계정 정보 조회 및 users 테이블 입력 2021.03.02
 
-                if (DB_nickname == "") {
-                    final EditText nickname_text = new EditText(FirebaseUIActivity.this);
-
-                    AlertDialog.Builder nickname_dlg = new AlertDialog.Builder(FirebaseUIActivity.this);
-                    nickname_dlg.setTitle("닉네임 설정 // 최대 10자");
-                    nickname_dlg.setView(nickname_text);
-                    nickname = nickname_text.getText().toString();
-                    nickname_dlg.setPositiveButton("입력", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            Toast.makeText(FirebaseUIActivity.this, "닉네임: " + nickname + "입력 되었습니다.", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                    nickname_dlg.show();
-                }
-
                 if (databaseID.equals(userID)) {
                     Toast.makeText(FirebaseUIActivity.this, "hello " + DB_nickname, Toast.LENGTH_SHORT).show();
                 }
@@ -150,7 +134,6 @@ public class FirebaseUIActivity extends AppCompatActivity implements View.OnClic
                         Map<String, Object> userMap = new HashMap<>();
                         userMap.put("lifepoint", lifepoint);
                         userMap.put("coin", coin_point);
-                        userMap.put("nickname", nickname);
                         Firestore.collection("users").document(databaseID).set(userMap, SetOptions.merge());
                     } else {
                         Toast.makeText(FirebaseUIActivity.this, "error", Toast.LENGTH_SHORT).show();
