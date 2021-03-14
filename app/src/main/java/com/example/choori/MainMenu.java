@@ -1,5 +1,6 @@
 package com.example.choori;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -13,8 +14,15 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.choori.authentication.FirebaseUIActivity;
+import com.example.choori.authentication.scenario;
+import com.firebase.ui.auth.AuthUI;
+import com.firebase.ui.auth.IdpResponse;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserInfo;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -40,6 +48,7 @@ public class MainMenu extends AppCompatActivity implements View.OnClickListener{
     String nickname = "";
     String databaseID = "";
     String DB_nickname = "";
+    int coin;
 
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private FirebaseFirestore Firestore = FirebaseFirestore.getInstance();
@@ -66,7 +75,25 @@ public class MainMenu extends AppCompatActivity implements View.OnClickListener{
         databaseID = user.getUid();
 
         // users 테이블에 Authentication UID 정보가 있는지 확인하는 과정
-        Firestore.collection("users").addSnapshotListener(new EventListener<QuerySnapshot>() {
+        DocumentReference docRef = Firestore.collection("users").document(databaseID);
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if(task.isSuccessful()) {
+                    DocumentSnapshot snap = task.getResult();
+                    if (snap.exists()) {
+                        coin = Integer.parseInt(String.valueOf(snap.get("coin")));
+                        DB_nickname = String.valueOf(snap.get("nickname"));
+                    }
+                    else {
+                        coin = 1;
+                        DB_nickname = "none";
+                    }
+                }
+            }
+        });
+                /*
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
                 if (value != null) {
@@ -74,6 +101,7 @@ public class MainMenu extends AppCompatActivity implements View.OnClickListener{
                         Map<String, Object> shot = snap.getData();
                         if (databaseID.equals(snap.getId())) {
                             DB_nickname = String.valueOf(snap.get("nickname"));
+                            coin = Integer.parseInt(String.valueOf(snap.get("coin")));
                             break;
                         } else {
                             //
@@ -82,9 +110,17 @@ public class MainMenu extends AppCompatActivity implements View.OnClickListener{
                 }
             }
         });
+
+                 */
         Toast.makeText(MainMenu.this, "value: "+DB_nickname, Toast.LENGTH_SHORT).show();
         // ↑ Authentication 계정 정보 조회 및 users 테이블 입력 (수정: 2021.03.08)
+        //<------------------------ 파이어베이스 파이어스토어 DB 조회하여 닉네임 설정 ------------------------>
 
+        nickname_setting();
+    }
+
+    public void nickname_setting() {
+        //<------------------------ 닉네임 설정 ------------------------>
         if (DB_nickname.equals("")) {
             final EditText nickname_text = new EditText(MainMenu.this);
 
@@ -104,7 +140,7 @@ public class MainMenu extends AppCompatActivity implements View.OnClickListener{
             });
             nickname_dlg.show();
         }
-        //<------------------------ 파이어베이스 파이어스토어 DB 조회하여 닉네임 설정 ------------------------>
+        //<------------------------ 닉네임 설정 ------------------------>
     }
 
     @Override
