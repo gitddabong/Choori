@@ -8,6 +8,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -75,6 +76,28 @@ public class MainMenu extends AppCompatActivity implements View.OnClickListener{
         databaseID = user.getUid();
 
         // users 테이블에 Authentication UID 정보가 있는지 확인하는 과정
+
+        final DocumentReference docRef = Firestore.collection("users").document(databaseID);
+        docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+                if (error != null) {
+                    Log.w("choori", "Listen failed", error);
+                }
+
+                if (value != null && value.exists()) {
+                    Log.d("choori", "Current data: " + value.getData());
+                    Map<String, Object> shot = value.getData();
+                    DB_nickname = String.valueOf(shot.get("nickname"));
+                    Log.d("choori", "Current data: " + DB_nickname);
+                }
+                else {
+                    DB_nickname = "none";
+                }
+            }
+        });
+
+        /*
         DocumentReference docRef = Firestore.collection("users").document(databaseID);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -92,6 +115,9 @@ public class MainMenu extends AppCompatActivity implements View.OnClickListener{
                 }
             }
         });
+
+         */
+
                 /*
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
@@ -116,12 +142,8 @@ public class MainMenu extends AppCompatActivity implements View.OnClickListener{
         // ↑ Authentication 계정 정보 조회 및 users 테이블 입력 (수정: 2021.03.08)
         //<------------------------ 파이어베이스 파이어스토어 DB 조회하여 닉네임 설정 ------------------------>
 
-        nickname_setting();
-    }
-
-    public void nickname_setting() {
         //<------------------------ 닉네임 설정 ------------------------>
-        if (DB_nickname.equals("")) {
+        if (DB_nickname == null) {
             final EditText nickname_text = new EditText(MainMenu.this);
 
             AlertDialog.Builder nickname_dlg = new AlertDialog.Builder(MainMenu.this);

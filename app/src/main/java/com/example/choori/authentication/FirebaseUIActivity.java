@@ -58,6 +58,7 @@ public class FirebaseUIActivity extends AppCompatActivity implements View.OnClic
         Button firebaseuiauthbtn = (Button)findViewById(R.id.firebaseuiauthbtn);
         firebaseuiauthbtn.setOnClickListener(this);
 
+        /*
         // ↓ Authentication 계정 정보 조회 및 users 테이블 입력 (수정: 2021.03.08)
 
         FirebaseUser user = mAuth.getCurrentUser();
@@ -78,13 +79,15 @@ public class FirebaseUIActivity extends AppCompatActivity implements View.OnClic
                             break;
                         } else {
                             userID = "none";
-                            //testID = snap.getId();
+                            DB_nickname = "none";
                         }
                     }
                 }
             }
         });
         // ↑ Authentication 계정 정보 조회 및 users 테이블 입력 (수정: 2021.03.08)
+
+         */
     }
 
     @Override
@@ -125,6 +128,34 @@ public class FirebaseUIActivity extends AppCompatActivity implements View.OnClic
                  */
                 // users 테이블에 Authentication UID 정보가 있는지 확인하는 과정
                 // ↑ Authentication 계정 정보 조회 및 users 테이블 입력 2021.03.02
+
+                // ↓ Authentication 계정 정보 조회 및 users 테이블 입력 (수정: 2021.03.08)
+
+                FirebaseUser user = mAuth.getCurrentUser();
+
+                databaseID = user.getUid();
+
+                // users 테이블에 Authentication UID 정보가 있는지 확인하는 과정
+                Firestore.collection("users").addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                        if (value != null) {
+                            for (DocumentSnapshot snap : value.getDocuments()) {
+                                Map<String, Object> shot = snap.getData();
+                                if (databaseID.equals(snap.getId())) {
+                                    userID = snap.getId();
+                                    DB_nickname = String.valueOf(snap.get("nickname"));
+                                    //testID = snap.getId();
+                                    break;
+                                } else {
+                                    userID = "none";
+                                    DB_nickname = "none";
+                                }
+                            }
+                        }
+                    }
+                });
+                // ↑ Authentication 계정 정보 조회 및 users 테이블 입력 (수정: 2021.03.08)
 
                 if (databaseID.equals(userID)) {
                     Toast.makeText(FirebaseUIActivity.this, "hello " + DB_nickname, Toast.LENGTH_SHORT).show();
